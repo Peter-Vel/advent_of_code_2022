@@ -6,7 +6,7 @@ import yaml
 import math
 
 # %%
-with open('./Input/Day11_Input_Test.yml', 'r') as file:
+with open('./Input/Day11_Input.yml', 'r') as file:
     monkeys = yaml.safe_load(file)
 
 # %%
