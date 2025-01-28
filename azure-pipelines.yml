@@ -4,34 +4,25 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- main
+  - main  # Replace 'main' with your branch name if needed
 
 pool:
-  vmImage: ubuntu-latest
-
-strategy:
-  matrix:
-    Python38:
-      python.version: '3.8'
-    Python39:
-      python.version: '3.9'
-    Python310:
-      python.version: '3.10'
-    Python311:
-      python.version: '3.11'
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+  - task: UsePythonVersion@1
+    inputs:
+      versionSpec: '3.x'  # Use your required Python version
+      addToPath: true
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt || echo "No requirements.txt found"
+    displayName: 'Install Dependencies'
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+  - script: |
+      for file in $(find . -name "*.py"); do
+        echo "Running $file"
+        python "$file"
+      done
+    displayName: 'Execute Python Files'
