@@ -10,14 +10,16 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: UsePythonVersion@1
+  - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.x'  # Use your required Python version
+      versionSpec: '3.x'  # Specify your desired Python version (e.g., '3.9')
       addToPath: true
 
   - script: |
       python -m pip install --upgrade pip
-      pip install -r requirements.txt || echo "No requirements.txt found"
+      if [ -f requirements.txt ]; then
+        pip install -r requirements.txt
+      fi
     displayName: 'Install Dependencies'
 
   - script: |
